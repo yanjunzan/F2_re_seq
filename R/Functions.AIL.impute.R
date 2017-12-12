@@ -71,7 +71,7 @@ tracing_physical <- function(input,bin=1e6,chr.len=200*1e6,cut=5){
   index.pos <- findInterval(input$pos,bin.loca)
   f <- as.numeric(calculate.origin.phy(x = trace.mat1$f1, index.pos = index.pos,cut=cut)$ratio.mrk)
   m <- as.numeric(calculate.origin.phy(x = trace.mat1$m1, index.pos = index.pos,cut=cut)$ratio.mrk)
-  loca <- (sort(unique(index.pos),decreasing = F)*bin+ 1.5*bin)
+  loca <- (sort(unique(index.pos),decreasing = F)*bin - 0.5*bin)
   return(list("f"=f,"m"=m,"loca"=loca))
 }   
 

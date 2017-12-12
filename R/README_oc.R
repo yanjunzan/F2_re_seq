@@ -3,6 +3,9 @@
 # From Yanjun 171205
 # I documented what I have done in this README.R file
 setwd("~/Dropbox/Projects/Ongoing/HL_F2_SeqMrk/From.Yanjun/")
+#Yanjun path
+setwd("~/Documents/impute/From.Yanjun/")
+
 source("./bin/R/Functions.AIL.impute.R")
 
 
@@ -127,14 +130,74 @@ points(x=trac$loca[trac$fn > mrk_thresh],y = trac$fn[trac$fn > mrk_thresh],col="
 
 ##########################################20171211-Yanjun ###############################
 ##This code generate a  data.frame with info on all the chromsomes
-
+# define a few parameter
 all.chr  <- read.table("~/Dropbox/Projects/Ongoing/HL_F2_SeqMrk/From.yanjun/data/chr_id.match.txt",stringsAsFactors = F,header = T,sep="\t")
 chroms <- all.chr$INSDC
+chroms.len <- all.chr$Size.Mb.*1e6
+cut.number <- 5 # cutoff on each bin
+bin.size <- 1e6 # size of each bin
 
-## this function get number of bin on each chr and generate index for each chr
-get.info <- function()
+## this function get number of bins on each chr, corresponding location and chromosome,
+## and generate an index for each chromosome
+get.info <- function(chroms,chroms.len,bin.size=1e6){
+  num.bin <- rep(NA,length(chroms))
+    index <- data.frame(array(NA,dim = c(length(chroms),2)))
+  colnames(index) <- c("start","end")
+  rownames(index) <- chroms
+  num.bin <- ceiling(chroms.len/bin.size)
+  names(num.bin) <- chroms
+  
+  if(any(num.bin==1))
+    warnings("a few chr only have one bin, start and end are set to the same","\n")
+  
+  index$start[1] <- 1
+  index$end[1] <- num.bin[1]
+  loca <- seq(from = 0.5,to =num.bin[1])
+  loca.chr <- rep(chroms[1] , num.bin[1])
+  for( i in 2:length(chroms)){
+    index$start[i] <- sum(num.bin[1:c(i-1)])+1
+    index$end[i] <- sum(num.bin[1:i])
+    loca <- c(loca,seq(from = 0.5,to =num.bin[i]))
+    loca.chr <- c(loca.chr,rep(chroms[i],num.bin[i]))
+  }
+  chr.loca <- rep(NA,max(index$end))
+  for( i in 1:length(loca)){
+    chr.loca[i] <- paste(loca.chr[i],"-",loca[i],sep = "")  
+  }
+  return(list("num.bin" = num.bin,"index"=index,"loca"=loca,"loca.chr"=loca.chr,"chr.loca"=chr.loca))
+}
 
 
+out.info <- get.info(chroms = chroms,chroms.len = chroms.len,bin.size = bin.size)
+
+## create the big data.frame, store each row for individual and each col for genotype in a bin
+f2.id  <- gsub(pattern = "(F2_.*)_S.*",replacement = "\\1",x = f2)
+genotype.hap1 <- data.frame(array(NA,dim = c(length(f2),max(out.info$index$end))))
+rownames(genotype.hap1) <- f2.id
+colnames(genotype.hap1) <- out.info$chr.loca
+# here only hap1 data is stored because hap1+hap2 =1
+
+# loop individual first so we read in each individual only once
+for( i in 1:length(f2)){
+  pathout <- paste(" ","./result/",f2[i],".vcf",sep="")
+  data1 <- read_trio(of_id = f2[i],F_id = F_id,M_id = M_id,vcf.file = vcf.file.f2,pathout = pathout,generate.input = F)
+  
+  for (k in 1:length(chroms) ){
+  chr  <- chroms[k]
+  setkey(data1,chr)
+  data.now <- data1[chr] # extract mrk from this chromsome 
+  trac.now <- tracing_physical(input = data.frame(data.now),bin = bin.size,chr.len = chroms.len[k],cut = cut.number)
+  # location at current loop
+  loca.now <- out.info$loca[out.info$loca.chr==chr]
+  idx.now <-c(out.info$index$start[k]:out.info$index$end[k])
+  index.rep <- idx.now[findInterval(trac.now$loca/1e6,loca.now)]
+  genotype.hap1[i,index.rep] <- trac.now$f
+  }
+  cat(f2[i],"done","\n")
+}
+require(gplots)
+heatmap.2(data.matrix(genotype.hap1),Rowv = FALSE, Colv=FALSE,trace="none")
+heatmap.2(log(nmarkers),Rowv = FALSE, Colv=FALSE)
 
 
 
