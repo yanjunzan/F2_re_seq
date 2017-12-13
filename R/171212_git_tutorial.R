@@ -2,13 +2,13 @@
 # There are many basics, but here I skipped all of them
 # first clone the folder I have uploaded
 git clone https://github.com/yanjunzan/F2_re_seq.git
-# you should see stuff in the folder
+# you should see folders and code downloaded (you will find the updated code here)
 
 ##There are many elegant way to avoid modify remote repository, i.e, there are something 
 ##called branch . but for now  the simple one is do not modify it until you are 100% sure. 
 # Example on how to upload modified script
-# do some thing on ./R/README_oc.R
-git add ./R/README_oc.R ## after change a file, git add filename should be ran
+# Imagine that some thing have been changed for ./R/README_oc.R
+git add ./R/README_oc.R ##  git add filename , tell git I have changed this 
 # git diff will show what has been changed.
 git commit -m "I changed this" # this will confirm the change and  need to write some note
 # push this change to remote
