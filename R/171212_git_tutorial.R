@@ -51,4 +51,7 @@ git remote add origin https://github.com/yanjunzan/F2_re_seq.git
  $ git branch -D yanjun
  
  #### there are more on how to push branch to server, we will learn it later
- 
+### handling changes in remote at the same time with your changes.
+1). git stash 
+2) git pull 
+3)git stash pop
