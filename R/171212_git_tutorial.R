@@ -37,6 +37,7 @@ git remote add origin https://github.com/yanjunzan/F2_re_seq.git
  $ git branch yanjun
  # switch to the new branch
  $ git checkout yanjun
+ $ git branch # this will shown wich branch you are currently in 
  # do some changes, and commit it by
  $ git commit -m "changed sth" #everything changed here, in only visible to me in thsi branch. 
  
