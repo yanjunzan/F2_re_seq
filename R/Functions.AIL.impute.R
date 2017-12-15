@@ -33,6 +33,32 @@ read_trio <- function(of_id,F_id,M_id,vcf.file,pathout=NULL,generate.input=T){
 ##
 ## this function get number of bins on each chr, corresponding location and chromosome,
 ## and generate an index for each chromosome
+read_grand.p <- function(of_id,F_id_h,M_id_h,F_id_l,M_id_l,vcf.file,py,pathout=NULL,generate.input=T){
+  if(!require(data.table))
+    require(data.table)
+  cat("1.Please make sure the input F_id_h,M_id_h are from HWS and F_id_l,M_id_l are from LWS","\n")
+  #1. check if the ped is right
+  # not implemented 
+  #2. read in data
+  cat("2.Format data using python","\n")
+  if(is.null(pathout)){
+    if(generate.input){
+      bash  <- paste(py,of_id," ",F_id_h," ",M_id_h," ",F_id_l," ",M_id_l,vcf.file ," ~/Documents/impute/data/testplate.F1/test.vcf",sep="")
+      system(bash)
+    }
+    cat("3. Read in data using fread")
+    input <- fread("~/Documents/impute/data/testplate.F1/test.vcf")
+  }else{
+    if(generate.input){
+      bash  <- paste(py,of_id," ",F_id_h," ",M_id_h," ",F_id_l," ",M_id_l,vcf.file ,pathout,sep="")
+      system(bash)
+    }
+    cat("3. Read in data using fread")
+    input <- fread(gsub(pattern = "\\s+(.*)",replacement="\\1",pathout))
+  }
+  colnames(input) <- c("chr","pos","ref","alt","f1","f2","m1","m2","of1","of2")
+  return(input)
+}
 
 ############
 get.info <- function(chroms,chroms.len,bin.size=1e6){
