@@ -71,7 +71,7 @@ for( i in 1:length(f2.plot)){
   data1 <- read_trio(of_id = f2[f2.plot[i]],F_id = F_id,M_id = M_id,vcf.file = vcf.file.f2,pathout = pathout,generate.input = F)
   setkey(data1,chr)
   data1.chr1 <- data1[chroms[chromosome]] # which chromsome to plot 
-  trac <- tracing_physical(input = data.frame(data1.chr1),bin = bin.size,chr.len = max(pos.chr1),cutmrk = cut.number) # trace inheritance in bin
+  trac <- tracing_physical(input = data.frame(data1.chr1),bin = bin.size,chr.len = max(pos.chr1),cut = cut.number) # trace inheritance in bin
   plot(x = trac$loca,trac$f,col="black",pch=19,ylim=c(0,1),frame.plot = F)
   points(x=trac$loca,y = trac$m,col="red",pch=19)
   #  abline(h=c(0.8,0.9),lty="dashed",col="red")
@@ -84,14 +84,14 @@ for (k in chroms ){
   file.in <- fread("./data/171113.Fixed.sites.founder.all.chr.txt") # this is a file with all the founder fixed mrk
   pos.chr1 <- file.in$V2[file.in$V1 == k] 
   num.bin <- 1+max(pos.chr1)/bin.size
-  bin.loca <- seq(0,max(pos.chr1),by=bin)+1
+  bin.loca <- seq(0,max(pos.chr1),by=bin.size)+1
 #now test with one matrix / chromosome
   genotypes <- matrix(nrow = length(f2),ncol = length(bin.loca))
   nmarkers <- matrix(nrow = length(f2),ncol = length(bin.loca))
   rownames(genotypes)<- unlist(strsplit(f2[],"_"))[c(seq(2,nrow(genotypes)*4,by=4))]
-  colnames(genotypes)<-bin.loca[1:length(bin.loca)-1]+0.5*bin.size-1
+  colnames(genotypes)<-bin.loca[1:length(bin.loca)]+0.5*bin.size-1
   rownames(nmarkers)<- unlist(strsplit(f2[],"_"))[c(seq(2,nrow(genotypes)*4,by=4))]
-  colnames(nmarkers)<-bin.loca[1:length(bin.loca)-1]+0.5*bin.size-1
+  colnames(nmarkers)<-bin.loca[1:length(bin.loca)]+0.5*bin.size-1
   l <- 0
   for( i in 1:length(f2)){
     l <- l+1
@@ -100,7 +100,7 @@ for (k in chroms ){
     data1 <- read_trio(of_id = f2[i],F_id = F_id,M_id = M_id,vcf.file = vcf.file.f2,pathout = pathout,generate.input = F)
     setkey(data1,chr)
     data1.chr1 <- data1[k] # extract mrk from this chromsome 
-    trac <- tracing_physical(input = data.frame(data1.chr1),bin = bin.size,chr.len = max(pos.chr1),cutmrk = cut.number)
+    trac <- tracing_physical(input = data.frame(data1.chr1),bin = bin.size,chr.len = max(pos.chr1),cut = cut.number)
     genotypes[l,findInterval(trac$loca,bin.loca)] <- trac$f
     nmarkers[l,findInterval(trac$loca,bin.loca)] <- trac$fn
   }
@@ -123,9 +123,6 @@ plot(x = trac$loca,trac$fn,col="black",pch=19,frame.plot = F)
 points(x=trac$loca[trac$fn > mrk_thresh],y = trac$fn[trac$fn > mrk_thresh],col="red",pch=19)
 
 # Get linkage maps!
-
-
-
 
 
 ##########################################20171211-Yanjun ###############################
@@ -195,15 +192,10 @@ for( i in 1:length(f2)){
   }
   cat(f2[i],"done","\n")
 }
+
 require(gplots)
 heatmap.2(data.matrix(genotype.hap1),Rowv = FALSE, Colv=FALSE,trace="none")
 heatmap.2(log(nmarkers),Rowv = FALSE, Colv=FALSE)
-
-
-
-
-
-
 
 #file.in <- fread("./data/171113.Fixed.sites.founder.all.chr.txt") # this is a file with all the founder fixed mrk
 
