@@ -134,37 +134,7 @@ chroms.len <- all.chr$Size.Mb.*1e6
 cut.number <- 5 # cutoff on each bin
 bin.size <- 1e6 # size of each bin
 
-## this function get number of bins on each chr, corresponding location and chromosome,
-## and generate an index for each chromosome
-get.info <- function(chroms,chroms.len,bin.size=1e6){
-  num.bin <- rep(NA,length(chroms))
-    index <- data.frame(array(NA,dim = c(length(chroms),2)))
-  colnames(index) <- c("start","end")
-  rownames(index) <- chroms
-  num.bin <- ceiling(chroms.len/bin.size)
-  names(num.bin) <- chroms
-  
-  if(any(num.bin==1))
-    warnings("a few chr only have one bin, start and end are set to the same","\n")
-  
-  index$start[1] <- 1
-  index$end[1] <- num.bin[1]
-  loca <- seq(from = 0.5,to =num.bin[1])
-  loca.chr <- rep(chroms[1] , num.bin[1])
-  for( i in 2:length(chroms)){
-    index$start[i] <- sum(num.bin[1:c(i-1)])+1
-    index$end[i] <- sum(num.bin[1:i])
-    loca <- c(loca,seq(from = 0.5,to =num.bin[i]))
-    loca.chr <- c(loca.chr,rep(chroms[i],num.bin[i]))
-  }
-  chr.loca <- rep(NA,max(index$end))
-  for( i in 1:length(loca)){
-    chr.loca[i] <- paste(loca.chr[i],"-",loca[i],sep = "")  
-  }
-  return(list("num.bin" = num.bin,"index"=index,"loca"=loca,"loca.chr"=loca.chr,"chr.loca"=chr.loca))
-}
-
-
+# get.info is removed to function.R
 out.info <- get.info(chroms = chroms,chroms.len = chroms.len,bin.size = bin.size)
 
 ## create the big data.frame, store each row for individual and each col for genotype in a bin
@@ -196,6 +166,35 @@ for( i in 1:length(f2)){
 require(gplots)
 heatmap.2(data.matrix(genotype.hap1),Rowv = FALSE, Colv=FALSE,trace="none")
 heatmap.2(log(nmarkers),Rowv = FALSE, Colv=FALSE)
+
+
+############## compare the mrk increase from fixed between h/l and with grandparents
+i=1
+pathout <- paste(" ","./result/",f2[i],".vcf",sep="")
+data1 <- read_trio(of_id = f2[f2.plot[i]],F_id = F_id,M_id = M_id,vcf.file = vcf.file.f2,pathout = pathout,generate.input = F)
+pathout2 <- paste(" ","./result/",f2[i],"full.vcf",sep="")
+py.script.gp <- "python3 ./bin/python/171215_read.vcf.grand.p.py " #/usr/local/Cellar/python3/3.6.3/bin/
+##for the first f2 the ped are
+#247 1655 1940 m f
+#209 1833 2064 f m
+# so ped file will be
+M_id_h <- ".*1655.*"
+F_id_l <- ".*1940.*"
+
+F_id_h <- ".*1833.*"
+M_id_l <- ".*2064.*"
+# need to change the vcf input, this one is already filtered will not gain anythings
+data2 <- read_grand.p(of_id = f2[i],F_id_h = F_id_h,M_id_h = M_id_h,F_id_l = F_id_l,M_id_l = M_id_l,vcf.file = vcf.file.f2,py = py.script.gp,pathout = pathout2)
+
+
+
+
+
+
+
+
+
+
 
 #file.in <- fread("./data/171113.Fixed.sites.founder.all.chr.txt") # this is a file with all the founder fixed mrk
 
