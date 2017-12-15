@@ -43,7 +43,9 @@ git remote add origin https://github.com/yanjunzan/F2_re_seq.git
  ## After I am done with my changes, I want to merge it with master and push back to server
  ######### >>>>>>>>>>>>>>>>>>>>>>>>>>>merge branching<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
  $ git checkout master
- $ git merge yanjun
+ $ git merge yanjun 
+ $ git push # now changes in branch yanjun is already merged with master, this command will overwrite
+ ## remote server. and conflicts will be marked and reminded.
  ## delete my branch, you do not have to do this
  $ git branch -D yanjun
  
