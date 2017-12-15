@@ -26,3 +26,26 @@ git remote add origin https://github.com/yanjunzan/F2_re_seq.git
  git config --global core.editor vim
 # double check he set up
  git config --list ### it list the file located in /etc/gitconfig or  ~/.gitconfig
+
+ 
+ ########>>>>>>>>>>>>>>>>>>>>>>>>>>>> 171215. git handling conflit
+ #######<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<branching<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ # you do not want to always overwrite the files in remote server, so need a backup files called branch, 
+ #everyone is working on their own branch and later merged with master(server file)
+ 
+ # now create a branch
+ $ git branch yanjun
+ # switch to the new branch
+ $ git checkout yanjun
+ # do some changes, and commit it by
+ $ git commit -m "changed sth" #everything changed here, in only visible to me in thsi branch. 
+ 
+ ## After I am done with my changes, I want to merge it with master and push back to server
+ ######### >>>>>>>>>>>>>>>>>>>>>>>>>>>merge branching<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ $ git checkout master
+ $ git merge yanjun
+ ## delete my branch, you do not have to do this
+ $ git branch -D yanjun
+ 
+ #### there are more on how to push branch to server, we will learn it later
+ 
