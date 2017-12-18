@@ -128,7 +128,8 @@ points(x=trac$loca[trac$fn > mrk_thresh],y = trac$fn[trac$fn > mrk_thresh],col="
 ##########################################20171211-Yanjun ###############################
 ##This code generate a  data.frame with info on all the chromsomes
 # define a few parameter
-all.chr  <- read.table("~/Dropbox/Projects/Ongoing/HL_F2_SeqMrk/From.yanjun/data/chr_id.match.txt",stringsAsFactors = F,header = T,sep="\t")
+#all.chr  <- read.table("~/Dropbox/Projects/Ongoing/HL_F2_SeqMrk/From.yanjun/data/chr_id.match.txt",stringsAsFactors = F,header = T,sep="\t")
+all.chr  <- read.table("./data/chr_id.match.txt",stringsAsFactors = F,header = T,sep="\t")
 chroms <- all.chr$INSDC
 chroms.len <- all.chr$Size.Mb.*1e6
 cut.number <- 5 # cutoff on each bin
@@ -162,6 +163,27 @@ for( i in 1:length(f2)){
   }
   cat(f2[i],"done","\n")
 }
+
+dim(genotype.hap1)
+write.table(genotype.hap1,file = "./data/F2_n30.test.geno.mat.txt",quote = F,sep = "\t")
+geno <- genotype.hap1
+upper.cut <- 0.8
+lower.cut <- 0.2
+arbitary.cut <- function(geno,upper.cut,lower.cut){
+  for( i in 1:nrow(geno)){
+    id.h <- which(geno[i,] >= upper.cut)
+    geno[i,id.h] <- 1
+    id.l <- which(geno[i,] <= lower.cut)
+    geno[i,id.l] <- -1
+    id.hl <- which(geno[i,] > lower.cut & geno[i,] < upper.cut)
+    geno[i,id.hl] <- 0
+    cat(i,"\n")
+  }
+  return(geno)
+}
+
+test <- arbitary.cut(geno = genotype.hap1,upper.cut = 0.8,lower.cut = 0.2)
+write.table(genotype.hap1,file = "./data/F2_n30.test.geno.mat.txt",quote = F,sep = "\t")
 
 require(gplots)
 heatmap.2(data.matrix(genotype.hap1),Rowv = FALSE, Colv=FALSE,trace="none")

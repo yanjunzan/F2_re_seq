@@ -78,5 +78,5 @@ with gzip.open(vcf_file, "rb") as vcf:
                 geno_F2_l = int(get_geno(con[index_F_l[0]])[1])
                 geno_M1_l = int(get_geno(con[index_M_l[0]])[0])
                 geno_M2_l = int(get_geno(con[index_M_l[0]])[1])
-                if sum([geno_F1_h, geno_F2_h, geno_M1_h, geno_M2_h,geno_F1_l, geno_F2_l, geno_M1_l, geno_M1_l]) == 4 and (sum([geno_F1_h, geno_F2_h, geno_M1_h, geno_M1_h]) == 0 or sum([geno_F1_h, geno_F2_h, geno_M1_h, geno_M1_h]) == 4 ):
+                if sum([geno_F1_h, geno_F2_h, geno_M1_h, geno_M2_h, geno_F1_l, geno_F2_l, geno_M1_l, geno_M1_l]) == 4 and (sum([geno_F1_h, geno_F2_h, geno_M1_h, geno_M1_h]) == 0 or sum([geno_F1_h, geno_F2_h, geno_M1_h, geno_M1_h]) == 4 ):
                     print(Chr, Pos, REF, ALT, geno_F1_h, geno_M2_h, geno_F1_l, geno_M2_l, geno_of1, geno_of2, sep="\t")

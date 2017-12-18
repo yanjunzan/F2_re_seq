@@ -66,5 +66,5 @@ with gzip.open(vcf_file, "rb") as vcf:
                 geno_F2 = int(get_geno(con[index_F[0]])[1])
                 geno_M1 = int(get_geno(con[index_M[0]])[0])
                 geno_M2 = int(get_geno(con[index_M[0]])[1])
-                if not (sum([geno_F1, geno_F2, geno_M1, geno_M1]) == 0 or sum([geno_F1, geno_F2, geno_M1, geno_M1]) == 4):
+                if not (sum([geno_F1, geno_F2, geno_M1, geno_M2]) == 0 or sum([geno_F1, geno_F2, geno_M1, geno_M1]) == 4):
                     print(Chr, Pos, REF, ALT, geno_F1, geno_F2, geno_M1, geno_M2, geno_of1, geno_of2, sep="\t")
