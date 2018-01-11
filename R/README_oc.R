@@ -183,7 +183,7 @@ arbitary.cut <- function(geno,upper.cut,lower.cut){
 }
 
 test <- arbitary.cut(geno = genotype.hap1,upper.cut = 0.8,lower.cut = 0.2)
-write.table(genotype.hap1,file = "./data/F2_n30.test.geno.mat.txt",quote = F,sep = "\t")
+write.table(test,file = "./data/F2_n30.test.geno.mat.txt",quote = F,sep = "\t")
 
 require(gplots)
 heatmap.2(data.matrix(genotype.hap1),Rowv = FALSE, Colv=FALSE,trace="none")

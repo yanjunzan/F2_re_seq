@@ -146,8 +146,6 @@ calculate.origin.phy <- function(x,index.pos=index.pos,cut=5){
   return(list("num.mrk"=num.mrk,"ratio.mrk"=ratio.mrk))
 }
 
-
-
 calculate.orgin <- function(x,index=index){
   return(tapply(X = x, INDEX = index, FUN = function(x) sum(x==0,na.rm = T)))
 }
