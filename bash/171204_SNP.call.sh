@@ -19,7 +19,8 @@ fi
 cd  "$outdir"/""vcffile""
 
 prefix=`basename $1 `     
- $GATK       -T UnifiedGenotyper \
+# to genotype given sites add -gt_mode GENOTYPE_GIVEN_ALLELES  --alleles /path/vcf 
+$GATK       -T UnifiedGenotyper \
                 -R $REFERENCE \
                 -nt $core \
                 -I $1 \
