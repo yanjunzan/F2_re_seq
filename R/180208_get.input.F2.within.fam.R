@@ -252,6 +252,30 @@ write.table(test2,file = "~/Documents/impute/data/F2_827.within.fam.mat.bin50.cu
 test2 <-arbitary.cut.missing(geno = genotype.hap1,upper.cut = 0.85,lower.cut = 0.15,missing.upper = 0.7,missing.lower = 0.3)
 
 write.table(test,file = "~/projects/F2_seq/data/F2_827.within.fam.mat.bin50.cut.txt",quote = F,sep = "\t")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+########################################################### Please stop here, below are test code.
 require(gplots)
 heatmap.2(data.matrix(test),Rowv = FALSE, Colv=FALSE,trace="none")
 ############# check the raw data
