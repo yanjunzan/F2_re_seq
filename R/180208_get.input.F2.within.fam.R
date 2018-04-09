@@ -52,7 +52,7 @@ sum(ped$ma.h %in% hid)
 sum(ped$ma.l %in% lid)
 
 
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< on server run below to get the intermediate files
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< on server run below to get the intermediate files from line57 to line137
 
 read_grand.p <- function(of_id,F_id_h,M_id_h,F_id_l,M_id_l,vcf.file,py,pathout=NULL,generate.input=T){
   if(!require(data.table))
@@ -136,7 +136,7 @@ foreach(i=1:nrow(f2.ped.sub.2)) %dopar% {
 stopCluster(cl)
 
 
-######################################################################### readin the intermediate files and run the bin averaging.
+######################################################################### readin the intermediate files and run the bin averaging. from line 141 to 189
 
 source("~/projects/F2_seq/F2_re_seq/R/Functions.AIL.impute.R")
 all.chr  <- read.table("/home/yanjun/projects/F2_seq/F2_re_seq/data/chr_id.match.txt",stringsAsFactors = F,header = T,sep="\t")
@@ -188,7 +188,7 @@ for( i in 1:length(f2.ped.sub.2$id.f2)){
 dim(genotype.hap1)
 write.table(genotype.hap1,file = "~/projects/F2_seq/data/F2_827.within.fam.bin50_bugcorrected.180223.txt",quote = F,sep = "\t")
 
-########################################## convert the averaged matrix to a readable format in rqtl
+########################################## convert the averaged matrix to a readable format in rqtl from line 191 to line 250
 genotype.hap1 <- read.table("~/Documents/impute/data/F2_827.within.fam.bin50_bugcorrected.180223.txt",header=T,stringsAsFactors = F)
 geno <- genotype.hap1
 upper.cut <- 0.8
