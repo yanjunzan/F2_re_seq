@@ -1,4 +1,4 @@
-# generate a ped input
+# generate a ped input from line1 to line54
 
 founder <- read.table("~/Documents/impute/git/data/180222_founder.txt",stringsAsFactors = F,header = T,sep = "\t")
 F1 <- read.table("~/Documents/impute/git/data/F1.ped.180208.txt",stringsAsFactors = F,header = T,sep = "\t")
@@ -52,7 +52,7 @@ sum(ped$ma.h %in% hid)
 sum(ped$ma.l %in% lid)
 
 
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< on dip
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< on server run below to get the intermediate files from line57 to line137
 
 read_grand.p <- function(of_id,F_id_h,M_id_h,F_id_l,M_id_l,vcf.file,py,pathout=NULL,generate.input=T){
   if(!require(data.table))
@@ -136,7 +136,7 @@ foreach(i=1:nrow(f2.ped.sub.2)) %dopar% {
 stopCluster(cl)
 
 
-
+######################################################################### readin the intermediate files and run the bin averaging. from line 141 to 189
 
 source("~/projects/F2_seq/F2_re_seq/R/Functions.AIL.impute.R")
 all.chr  <- read.table("/home/yanjun/projects/F2_seq/F2_re_seq/data/chr_id.match.txt",stringsAsFactors = F,header = T,sep="\t")
@@ -188,6 +188,7 @@ for( i in 1:length(f2.ped.sub.2$id.f2)){
 dim(genotype.hap1)
 write.table(genotype.hap1,file = "~/projects/F2_seq/data/F2_827.within.fam.bin50_bugcorrected.180223.txt",quote = F,sep = "\t")
 
+########################################## convert the averaged matrix to a readable format in rqtl from line 191 to line 250
 genotype.hap1 <- read.table("~/Documents/impute/data/F2_827.within.fam.bin50_bugcorrected.180223.txt",header=T,stringsAsFactors = F)
 geno <- genotype.hap1
 upper.cut <- 0.8
@@ -246,12 +247,35 @@ test2[2,] <- line2
 test2[3:nrow(test2),2:length(line1)] <- test
 test2[3:nrow(test2),1] <- rownames(test)
 #rbind.data.frame(line1,line2,test1,)
-write.table(test2,file = "~/Documents/impute/data/F2_827.within.fam.mat.bin50.cut.bugcorrected.180223.csv",quote = F,sep = ";",row.names = F,col.names = F)
+write.table(test2,file = "~/Documents/impute/data/F2_827.within.fam.mat.bin50.cut.bugcorrected.180223.csv",quote = F,sep = ";",row.names = F,col.names = F) # this will be used as input in rqtl
 
 # below is 1-0.85 homozygous hig 0.85-0.7 NA,0.7-0.3 heterzogous, 0.3-0.15 NA,below 0.15 hom low
-test2 <-arbitary.cut.missing(geno = genotype.hap1,upper.cut = 0.85,lower.cut = 0.15,missing.upper = 0.7,missing.lower = 0.3)
+#test2 <-arbitary.cut.missing(geno = genotype.hap1,upper.cut = 0.85,lower.cut = 0.15,missing.upper = 0.7,missing.lower = 0.3)
+#write.table(test,file = "~/projects/F2_seq/data/F2_827.within.fam.mat.bin50.cut.txt",quote = F,sep = "\t")
 
-write.table(test,file = "~/projects/F2_seq/data/F2_827.within.fam.mat.bin50.cut.txt",quote = F,sep = "\t")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+########################################################### Please stop here, below are test code.
 require(gplots)
 heatmap.2(data.matrix(test),Rowv = FALSE, Colv=FALSE,trace="none")
 ############# check the raw data
